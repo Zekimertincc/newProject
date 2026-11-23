@@ -19,4 +19,30 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+
+  // Katman kuralı: engine/ React'ı, ui/'yi ve scene/'i tanımaz
+  {
+    files: ['src/engine/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': ['error', {
+        patterns: [
+          { group: ['react', 'react/*', 'react-dom', 'react-dom/*', '@react-three/*'], message: 'engine/ React bilmez.' },
+          { group: ['**/ui', '**/ui/*', '**/scene', '**/scene/*'], message: 'engine/ ui/ ve scene/ katmanlarını import edemez.' },
+        ],
+      }],
+    },
+  },
+
+  // Katman kuralı: state/ hiçbir katmanı ve React'ı tanımaz
+  {
+    files: ['src/state/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': ['error', {
+        patterns: [
+          { group: ['react', 'react/*', 'react-dom', 'react-dom/*'], message: 'state/ React bilmez (vanilla store).' },
+          { group: ['**/engine', '**/engine/*', '**/ui', '**/ui/*', '**/scene', '**/scene/*'], message: 'state/ başka katman import edemez.' },
+        ],
+      }],
+    },
+  },
 ])
